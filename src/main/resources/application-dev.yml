@@ -1,0 +1,6 @@
+chrome:
+  driver:
+    location: /Users/qianhao.zhou/tools/chromedriver
+    poolSize: 1
+
+rruu.url: http://www.rruu.com/new_zealand/185.html
