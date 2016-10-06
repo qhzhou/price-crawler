@@ -1,9 +1,8 @@
-package com.aotearoa.crawler.rruu;
+package com.aotearoa.crawler.tourforfun;
 
 import com.aotearoa.crawler.driver.CustomizedChromeDriver;
 import com.aotearoa.crawler.resource.SimplePool;
 
-import org.openqa.selenium.By;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,20 +11,21 @@ import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Request;
 import us.codecraft.webmagic.Task;
-import us.codecraft.webmagic.downloader.AbstractDownloader;
+import us.codecraft.webmagic.downloader.Downloader;
 import us.codecraft.webmagic.selector.PlainText;
 
 /**
- * Created by qianhao.zhou on 10/3/16.
+ * Created by qianhao.zhou on 10/6/16.
  */
 @Component
-public class RruuDownloader extends AbstractDownloader {
+public class TffDownloader implements Downloader {
 
-    private static final Logger logger = LoggerFactory.getLogger(RruuDownloader.class);
+    private static final Logger logger = LoggerFactory.getLogger(TffDownloader.class);
 
     @Autowired
     private SimplePool<CustomizedChromeDriver> pool;
 
+    @Override
     public Page download(Request request, Task task) {
         CustomizedChromeDriver chromeDriver = pool.acquireResource();
         if (chromeDriver == null) {
@@ -34,7 +34,7 @@ public class RruuDownloader extends AbstractDownloader {
         }
         try {
             chromeDriver.get(request.getUrl());
-            chromeDriver.findElement(By.xpath("//*[@id=\"fb_pshow\"]/div[1]/div/div[1]/div/a[3]")).click();
+//            chromeDriver.findElementByXPath("//*[@id=\"J_SkuWrap\"]/dd[1]/ul/li[3]/a/span").click();
             Page page = new Page();
             page.setRawText(chromeDriver.getPageSource());
             page.setUrl(new PlainText(request.getUrl()));
@@ -45,6 +45,7 @@ public class RruuDownloader extends AbstractDownloader {
         }
     }
 
+    @Override
     public void setThread(int threadNum) {
 
     }

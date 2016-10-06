@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import us.codecraft.webmagic.Site;
+
 /**
  * Created by qianhao.zhou on 10/4/16.
  */
@@ -17,6 +19,11 @@ public class PoolConfig {
 
     @Value("${chrome.driver.poolSize}")
     private int poolSize;
+
+    @Bean
+    public Site site() {
+        return Site.me().setRetryTimes(3).setSleepTime(1000);
+    }
 
     @Bean
     public SimplePool<CustomizedChromeDriver> chromeDriverPool() {

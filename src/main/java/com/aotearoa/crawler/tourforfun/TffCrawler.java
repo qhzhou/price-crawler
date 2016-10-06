@@ -1,4 +1,4 @@
-package com.aotearoa.crawler.rruu;
+package com.aotearoa.crawler.tourforfun;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,35 +16,37 @@ import us.codecraft.webmagic.pipeline.ConsolePipeline;
 import us.codecraft.webmagic.processor.PageProcessor;
 
 /**
- * Created by qianhao.zhou on 10/3/16.
+ * Created by qianhao.zhou on 10/6/16.
  */
 @Component
-public class RruuCrawler implements PageProcessor {
+public class TffCrawler implements PageProcessor {
 
-    private static final Logger logger = LoggerFactory.getLogger(RruuCrawler.class);
+    private static final Logger logger = LoggerFactory.getLogger(TffCrawler.class);
 
     @Autowired
     private Site site;
 
-    @Autowired
-    private RruuDownloader downloader;
-
-    @Value("${rruu.url}")
+    @Value("${tff.url}")
     private String url;
 
+    @Autowired
+    private TffDownloader downloader;
+
+    @Override
     public void process(Page page) {
-        page.putField("company", "rruu");
-        page.putField("price", page.getHtml().xpath("//*[@id=\"totoaldiv\"]/em/text()"));
-        page.putField("time", new Date().toString());
+        page.putField("company", "tour for fun");
+        page.putField("price", page.getHtml().xpath("//*[@id=\"J_Price\"]/span/text()"));
+        page.putField("date", new Date().toString());
     }
 
+    @Override
     public Site getSite() {
         return site;
     }
 
     @Scheduled(cron = "*/5 * * * * ?")
     public void execute() {
-        logger.info("rruu crawler started, url:" + url);
+        logger.info("tff crawler started, url:" + url);
         logger.info("downloader:" + downloader);
         Spider.create(this).
                 addUrl(url).
@@ -52,6 +54,6 @@ public class RruuCrawler implements PageProcessor {
                 setDownloader(this.downloader).
                 thread(1).
                 run();
-        logger.info("rruu crawler finished");
+        logger.info("tff crawler finished");
     }
 }
